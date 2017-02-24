@@ -33,6 +33,6 @@ Puppet::Type.type(:package).provide(:brewlink,
   end
 
   def self.instances
-    nil
+    []
   end
 end
