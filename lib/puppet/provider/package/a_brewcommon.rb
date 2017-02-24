@@ -1,6 +1,6 @@
 require 'puppet/provider/package'
 
-Puppet::Type.type(:package).provide(:brewcommon,
+Puppet::Type.type(:package).provide(:a_brewcommon,
                                     :parent => Puppet::Provider::Package) do
   desc 'Base class for brew package management'
 

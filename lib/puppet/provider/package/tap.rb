@@ -1,6 +1,6 @@
 Puppet::Type.type(:package).provide(:tap,
-                                    :parent => :brewcommon,
-                                    :source => :brewcommon) do
+                                    :parent => :a_brewcommon,
+                                    :source => :a_brewcommon) do
   desc 'Tap management using HomeBrew on OS X'
 
   has_feature :install_options
