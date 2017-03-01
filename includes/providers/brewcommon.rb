@@ -22,19 +22,16 @@ Puppet::Type.type(:package).provide(:brewcommon,
 
     warn('Homebrew will be dropping support for root-owned homebrew by November 2016. Though this module will not prevent you from running homebrew as root, you may run into unexpected issues. Please migrate your installation to a user account -- this module will enforce this once homebrew has officially dropped support for root-owned installations.') if owner == 0
 
-    execute_loop(cmd, owner, group, combine, {'HOME' => home }, failonfail, 5)
-  end
-
-  def self.execute_loop(cmd, uid, gid, combine, custom_environment, failonfail, tries)
+    tries = 5
     success = false
     count = 0
     begin
-      super.execute(cmd, :uid => uid, :gid => gid, :combine => combine,
-                    :custom_environment => custom_environment, :failonfail => true)
+      super(cmd, :uid => owner, :gid => group, :combine => combine,
+            :custom_environment => {'HOME' => home }, :failonfail => true)
       success = true
-    rescue Puppet::ExecutionFailure => e
+    rescue Puppet::ExecutionFailure
       puts "Homebrew execution failed. Trying again...(#{count += 1}/#{tries})"
-      retry while (count) < tries
+      retry while count < tries
     end
 
     unless success
