@@ -30,8 +30,8 @@ Puppet::Type.type(:package).provide(:brewcommon,
             :custom_environment => {'HOME' => home }, :failonfail => true)
       success = true
     rescue Puppet::ExecutionFailure
-      puts "Count is #{count}"
-      puts "Homebrew execution failed. Trying again...(#{count += 1}/#{tries})"
+      $stderr.puts "Count is #{count}"
+      $stderr.puts "Homebrew execution failed. Trying again...(#{count += 1}/#{tries})"
       retry while count < tries
     end
 
@@ -58,7 +58,7 @@ Puppet::Type.type(:package).provide(:brewcommon,
     when true, false, Symbol
       name
       else
-      puts "Name is #{name}"
+      $stderr.puts "Name is #{name}"
       name + "-#{should}"
     end
   end
