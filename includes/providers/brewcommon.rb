@@ -22,29 +22,32 @@ Puppet::Type.type(:package).provide(:brewcommon,
 
     warn('Homebrew will be dropping support for root-owned homebrew by November 2016. Though this module will not prevent you from running homebrew as root, you may run into unexpected issues. Please migrate your installation to a user account -- this module will enforce this once homebrew has officially dropped support for root-owned installations.') if owner == 0
 
-    tries = 20
-    success = false
-    count = 0
-    result = nil
-    err = nil
-    begin
-      result = super(cmd, :uid => owner, :gid => group, :combine => combine,
-            :custom_environment => {'HOME' => home }, :failonfail => failonfail)
-      success = true
-    rescue Puppet::ExecutionFailure => e
-      $stderr.puts "Homebrew execution failed. Trying again...(#{count += 1}/#{tries})"
-      err = e
-      $stderr.puts 'Clearing Homebrew Caches before trying again...'
-      `find #{home}/Library/Caches/Homebrew -type f -print0 | xargs -0 rm --`
-      `find #{home}/Library/Caches/Homebrew/Cask -type f -print0 | xargs -0 rm --`
-      retry while count < tries
-    end
+    super(cmd, :uid => owner, :gid => group, :combine => combine,
+          :custom_environment => {'HOME' => home }, :failonfail => failonfail)
 
-    unless success || !failonfail
-      raise err
-    end
-
-    result
+    # tries = 20
+    # success = false
+    # count = 0
+    # result = nil
+    # err = nil
+    # begin
+    #   result = super(cmd, :uid => owner, :gid => group, :combine => combine,
+    #                  :custom_environment => {'HOME' => home }, :failonfail => failonfail)
+    #   success = true
+    # rescue Puppet::ExecutionFailure => e
+    #   $stderr.puts "Homebrew execution failed. Trying again...(#{count += 1}/#{tries})"
+    #   err = e
+    #   $stderr.puts 'Clearing Homebrew Caches before trying again...'
+    #   `find #{home}/Library/Caches/Homebrew -type f -print0 | xargs -0 rm --`
+    #   `find #{home}/Library/Caches/Homebrew/Cask -type f -print0 | xargs -0 rm --`
+    #   retry while count < tries
+    # end
+    #
+    # unless success || !failonfail
+    #   raise err
+    # end
+    #
+    # return result
   end
 
   def execute(*args)
