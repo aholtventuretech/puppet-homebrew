@@ -1,6 +1,6 @@
 Puppet::Type.type(:package).provide(:brew,
-                                    :parent => :a_brewcommon,
-                                    :source => :a_brewcommon) do
+                                    :parent => :brewcommon,
+                                    :source => :brewcommon) do
   desc 'Package management using HomeBrew on OS X'
 
   has_feature :install_options

@@ -5,7 +5,7 @@ class HomebrewProviders
   def load_providers
     current_dir = File.expand_path(File.dirname(__FILE__))
 
-    require "#{current_dir}/../../../../includes/providers/a_brewcommon"
+    require "#{current_dir}/../../../../includes/providers/brewcommon"
     require "#{current_dir}/../../../../includes/providers/brew"
     require "#{current_dir}/../../../../includes/providers/brewcask"
     require "#{current_dir}/../../../../includes/providers/brewlink"

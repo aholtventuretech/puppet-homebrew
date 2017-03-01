@@ -1,6 +1,6 @@
 require 'puppet/provider/package'
 
-Puppet::Type.type(:package).provide(:a_brewcommon,
+Puppet::Type.type(:package).provide(:brewcommon,
                                     :parent => Puppet::Provider::Package) do
   desc 'Base class for brew package management'
 
@@ -22,8 +22,25 @@ Puppet::Type.type(:package).provide(:a_brewcommon,
 
     warn('Homebrew will be dropping support for root-owned homebrew by November 2016. Though this module will not prevent you from running homebrew as root, you may run into unexpected issues. Please migrate your installation to a user account -- this module will enforce this once homebrew has officially dropped support for root-owned installations.') if owner == 0
 
-    super(cmd, :uid => owner, :gid => group, :combine => combine,
-          :custom_environment => { 'HOME' => home }, :failonfail => failonfail)
+    execute_loop(cmd, :uid => owner, :gid => group, :combine => combine,
+                 :custom_environment => { 'HOME' => home }, :failonfail => failonfail, :tries => 5)
+  end
+
+  def self.execute_loop(cmd, uid, gid, combine, custom_environment, failonfail, tries)
+    success = false
+    count = 0
+    begin
+      super.execute(cmd, :uid => uid, :gid => gid, :combine => combine,
+                    :custom_environment => custom_environment, :failonfail => true)
+      success = true
+    rescue Puppet::ExecutionFailure => e
+      puts "Homebrew execution failed. Trying again...(#{count += 1}/#{tries})"
+      retry while (count) < tries
+    end
+
+    unless success
+      raise Puppet::ExecutionFailure
+    end
   end
 
   def execute(*args)
