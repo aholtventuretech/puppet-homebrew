@@ -30,16 +30,18 @@ Puppet::Type.type(:package).provide(:brewcommon,
       result = super(cmd, :uid => owner, :gid => group, :combine => combine,
             :custom_environment => {'HOME' => home }, :failonfail => true)
       success = true
-    rescue Puppet::ExecutionFailure
+    rescue Puppet::ExecutionFailure => e
       $stderr.puts "Homebrew execution failed. Trying again...(#{count += 1}/#{tries})"
+      result = e
       retry while count < tries
     end
 
-    unless success || !fail
-      raise Puppet::ExecutionFailure
+    if success || !failonfail
+      result
+    else
+      raise result
     end
 
-    result
   end
 
   def execute(*args)
