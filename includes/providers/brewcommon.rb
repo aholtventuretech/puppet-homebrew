@@ -37,12 +37,11 @@ Puppet::Type.type(:package).provide(:brewcommon,
       retry while count < tries
     end
 
-    if success || !failonfail
-      result
-    else
+    unless success || !failonfail
       raise err
     end
 
+    result
   end
 
   def execute(*args)
