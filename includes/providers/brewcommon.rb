@@ -34,6 +34,9 @@ Puppet::Type.type(:package).provide(:brewcommon,
     rescue Puppet::ExecutionFailure => e
       $stderr.puts "Homebrew execution failed. Trying again...(#{count += 1}/#{tries})"
       err = e
+      $stderr.puts 'Clearing Homebrew Caches before tying again...'
+      `find #{home}/Library/Caches/Homebrew -type f -print0 | xargs -0 rm --`
+      `find #{home}/Library/Caches/Cask -type f -print0 | xargs -0 rm --`
       retry while count < tries
     end
 
