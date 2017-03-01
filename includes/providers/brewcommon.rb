@@ -57,7 +57,8 @@ Puppet::Type.type(:package).provide(:brewcommon,
     case should
     when true, false, Symbol
       name
-    else
+      else
+      puts "Name is #{name}"
       name + "-#{should}"
     end
   end
