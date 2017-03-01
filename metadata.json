@@ -1,6 +1,6 @@
 {
   "name": "aholtventuretech-homebrew",
-  "version": "1.5.7",
+  "version": "1.5.8",
   "author": "thekevjames",
   "summary": "Homebrew (+brewcask! +taps!) package installer and provider",
   "license": "Apache-2.0",
